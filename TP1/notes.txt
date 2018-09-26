@@ -1,0 +1,2 @@
+O critério de parada mudou, porque a matriz de pertinência pode mudar, mas o cluster dos pontos
+não necessariamente muda com as mudanças da matriz. Uma opção é ver mudanças nos centróides.

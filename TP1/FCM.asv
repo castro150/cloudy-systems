@@ -6,7 +6,7 @@
 % load fcm_dataset.mat;
 % X = x;
 
-function [U, idx, y, iter] = FCM(X, K, e, plotObj)
+function FCM(X, K, e)
     m = 2;
     n = size(X,1);
     d = size(X,2);
@@ -74,14 +74,14 @@ function [U, idx, y, iter] = FCM(X, K, e, plotObj)
             equals = 0;
         end;
         oldCentroids = centroids;
+
     end;
-    y = J(end);
     
-    if plotObj,
-        % ploting the objective function as a function of the number of iterations
-        figure(2);
-        hold on;
-        plot(1:iter, J(1:iter), 'b--', 'LineWidth', 2);
-        grid on;
-    end
+    % ploting the objective function as a function of the number of iterations
+    figure(2);
+    hold on;
+    plot(1:iter, J(1:iter), 'b--', 'LineWidth', 2);
+    grid on;
+    
+    return [U idx]
 end
