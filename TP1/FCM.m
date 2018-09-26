@@ -1,18 +1,19 @@
-% clear all;
-% close all;
-% clc;
+%------------------------------------------------------------------------%
+%                   Universidade Federal de Minas Gerais
+%                       ELE075 - Sistemas Nebulosos
+%                         Trabalho Computacional I
+%                          Prof. Cristiano Leite
 % 
-% % carregando e plotando os dados
-% load fcm_dataset.mat;
-% X = x;
-
+% 
+% Aluno: Rafael Carneiro de Castro
+% Matrícula: 2013030210
+% Data: 03/10/2018
+%------------------------------------------------------------------------%
+% Algoritmo FCM
 function [U, idx, y, iter] = FCM(X, K, e, plotObj)
     m = 2;
     n = size(X,1);
     d = size(X,2);
-
-    %------------------------------------------------------------------------
-    % Algoritmo K-Means
 
     % randomly assign membership degrees to each observation
     U = rand(n,K);

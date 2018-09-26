@@ -1,3 +1,15 @@
+%------------------------------------------------------------------------%
+%                   Universidade Federal de Minas Gerais
+%                       ELE075 - Sistemas Nebulosos
+%                         Trabalho Computacional I
+%                          Prof. Cristiano Leite
+% 
+% 
+% Aluno: Rafael Carneiro de Castro
+% Matrícula: 2013030210
+% Data: 03/10/2018
+%------------------------------------------------------------------------%
+% Algoritmo KMeans disponibilizado pelo professor
 function [U, idx, y, iter] = KMeans(X, K, plotObj)
     % step 1: randomly assign a cluster to each one of the patterns
     n = size(X,1);
