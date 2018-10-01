@@ -10,7 +10,7 @@
 % Data: 03/10/2018
 %------------------------------------------------------------------------%
 % Algoritmo FCM
-function [U, idx, y, iter] = FCM(X, K, e, plotObj)
+function [U, idx, y, iter, centroids] = FCM(X, K, e, plotObj)
     m = 2;
     n = size(X,1);
     d = size(X,2);
