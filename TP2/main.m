@@ -103,3 +103,12 @@ for i=2:K,
     plot(centers(i,1), centers(i,2), 'x', 'Color', colors(i, :), 'MarkerSize', 15, 'LineWidth', 3);
 end
 hold off
+
+% Definindo regras para inferência.
+yj = zeros(K, 1);
+for j=1:K,
+    % Definindo o consequente das regras como sendo a classe preponderante
+    % pelas pertinências dos pontos naquele grupo j.
+    Uj = U(j,:);
+    yj(j) = sum(Uj(yt == 1)) > sum(Uj(yt == 0));
+end
