@@ -108,7 +108,7 @@ hold off
 % Definindo regras para inferência.
 m = size(xt, 1);
 yj = zeros(K, 1);
-uA = zeros(d, K, m);
+A = zeros(d, K, m);
 for j=1:K,
     % Definindo o consequente das regras como sendo a classe preponderante
     % pelas pertinências dos pontos naquele grupo j.
@@ -118,22 +118,14 @@ for j=1:K,
     for i=1:d,
         % Gaussiana com centro na projeção do centróide do grupo
         % j na variável de entrada i.
-        uA(i, j, :) = gaussmf(xt(:,1), [centers(j, i) 2]);
+        A(i, j, :) = gaussmf(xt(:,1), [centers(j, i) 0.5]);
     end
 end
 
-% Gerando saídas.
-yr = zeros(m,1);
 for k=1:m,
     % Graus de ativação da amostra para cada regra.
-    wj = prod(uA(:, :, k));
+    wj = prod(A(:,:,1));
     
-    % Agregando graus de ativação para regras com
-    % mesmo consequente com a soma probabilística.
-    ag1 = probor(wj(yj == 0)');
-    ag2 = probor(wj(yj == 1)');
-    
-    % Classificando resultado final da variável pela
-    % classe de maior soma probabilística.
-    yr(k) = ag1 < ag2;
+    wj(yj == 0);
+    wj(yj == 1);
 end
