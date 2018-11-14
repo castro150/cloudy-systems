@@ -1,4 +1,16 @@
-function accuracy = fuzzy_classifier(x, y, K)
+%------------------------------------------------------------------------%
+%                   Universidade Federal de Minas Gerais
+%                       ELE075 - Sistemas Nebulosos
+%                        Trabalho Computacional II
+%                          Prof. Cristiano Leite
+% 
+% 
+% Aluno: Rafael Carneiro de Castro
+% Matrícula: 2013030210
+% Data: 11/11/2018
+%------------------------------------------------------------------------%
+% Classificador fuzzy
+function accuracy = fuzzy_classifier(x, y, K, plotGraphs)
     if K > 8, K = 8; end
 
     d = size(x, 2);
@@ -40,19 +52,21 @@ function accuracy = fuzzy_classifier(x, y, K)
         [~, cluster] = max(U(:,i));
         idx(i) = cluster;
     end
-
-    % Plotando agrupamentos.
-    figure('name', 'Agrupamento', 'number', 'off');
-    points = xt(idx == 1, :);
-    plot(points(:, 1), points(:, 2), 'o', 'Color', colors(1, :));
-    hold on
-    plot(centers(1,1), centers(1,2), 'x', 'Color', colors(1, :), 'MarkerSize', 15, 'LineWidth', 3);
-    for i=2:K,
-        points = xt(idx == i, :);
-        plot(points(:, 1), points(:, 2), 'o', 'Color', colors(i, :));
-        plot(centers(i,1), centers(i,2), 'x', 'Color', colors(i, :), 'MarkerSize', 15, 'LineWidth', 3);
+    
+    if plotGraphs,
+        % Plotando agrupamentos.
+        figure('name', 'Agrupamento', 'number', 'off');
+        points = xt(idx == 1, :);
+        plot(points(:, 1), points(:, 2), 'o', 'Color', colors(1, :));
+        hold on
+        plot(centers(1,1), centers(1,2), 'x', 'Color', colors(1, :), 'MarkerSize', 15, 'LineWidth', 3);
+        for i=2:K,
+            points = xt(idx == i, :);
+            plot(points(:, 1), points(:, 2), 'o', 'Color', colors(i, :));
+            plot(centers(i,1), centers(i,2), 'x', 'Color', colors(i, :), 'MarkerSize', 15, 'LineWidth', 3);
+        end
+        hold off
     end
-    hold off
 
     % Definindo regras para inferência.
     sig = zeros(K, d);
@@ -115,6 +129,19 @@ function accuracy = fuzzy_classifier(x, y, K)
             yr(k) = saida;
             errors = errors + 1;
         end
+    end
+    
+    if plotGraphs,
+        % Plotando separação final.
+        figure('name', 'Separação Final', 'number', 'off');
+        hold on
+        for v=2:size(xv, 1),
+            color = 'k';
+            if (yr(v) == 1); color = 'r'; end;
+            point = xv(v, :);
+            plot(point(1), point(2), 'o', 'Color', color);
+        end
+        hold off
     end
 
     % Retorno.
