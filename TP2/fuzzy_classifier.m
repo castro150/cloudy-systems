@@ -17,8 +17,8 @@ function accuracy = fuzzy_classifier(x, y, K, plotGraphs)
     % Separando dados em treino e teste, equilibrando as duas classes.
     P = 0.70; % 70% para treino e 30% para teste.
     data = [x y];
-    class1 = data(data(:, 3) == 0, :);
-    class2 = data(data(:, 3) == 1, :);
+    class1 = data(data(:, d + 1) == 0, :);
+    class2 = data(data(:, d + 1) == 1, :);
 
     % Separando primeira classe.
     m = size(class1, 1);
@@ -34,11 +34,11 @@ function accuracy = fuzzy_classifier(x, y, K, plotGraphs)
 
     % Agrupando treino e teste.
     training = [training1; training2];
-    yt = training(:,3);
-    xt = training(:,1:2);
+    yt = training(:, d + 1);
+    xt = training(:, 1:d);
     testing = [testing1; testing2];
-    yv = testing(:,3);
-    xv = testing(:,1:2);
+    yv = testing(:, d + 1);
+    xv = testing(:, 1:d);
 
     colors = [0 0 1; 1 0 0; 1 1 0; 0 1 0; 1 0 1; 0 1 1; 0 0 0; 1 0.5 0.5];
 
@@ -137,9 +137,11 @@ function accuracy = fuzzy_classifier(x, y, K, plotGraphs)
         hold on
         for v=2:size(xv, 1),
             color = 'k';
+            symbol = 'o';
             if (yr(v) == 1); color = 'r'; end;
+            if (yr(v) ~= yv(v)); symbol = 'x'; end;
             point = xv(v, :);
-            plot(point(1), point(2), 'o', 'Color', color);
+            plot(point(1), point(2), symbol, 'Color', color);
         end
         hold off
     end

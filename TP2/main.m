@@ -60,3 +60,15 @@ end
 figure('name', 'Precisões - dataset_2d', 'number', 'off');
 accPlot = plot(2:8, accuracies, 'LineWidth', 3);
 ylim([0.2 1.1]);
+
+%% Testando o classificador com a base Pima Diabetes.
+D = csvread('diabetes.csv');
+
+xd = D(:, 1:8);
+yd = D(:, 9);
+
+accuracies2 = zeros(7, 1);
+for K=2:8,
+    % Plota os gráficos para K = 2, K = 3 e K = 8.
+    accuracies2(K - 1) = fuzzy_classifier(xd, yd, K, 0);
+end
