@@ -1,7 +1,7 @@
 %------------------------------------------------------------------------%
 %                   Universidade Federal de Minas Gerais
 %                       ELE075 - Sistemas Nebulosos
-%                        Trabalho Computacional II
+%                        Trabalho Computacional III
 %                          Prof. Cristiano Leite
 % 
 % 
