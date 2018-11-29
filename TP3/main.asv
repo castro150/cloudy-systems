@@ -1,0 +1,35 @@
+%------------------------------------------------------------------------%
+%                   Universidade Federal de Minas Gerais
+%                       ELE075 - Sistemas Nebulosos
+%                        Trabalho Computacional II
+%                          Prof. Cristiano Leite
+% 
+% 
+% Aluno: Rafael Carneiro de Castro
+% Matrícula: 2013030210
+% Data: 11/11/2018
+%------------------------------------------------------------------------%
+%% Aproximação da função seno por ANFIS.
+clear all;
+close all;
+clc;
+
+xt = (0:0.01:2*pi)';
+y_train = sin(x_train);
+train_data = [x_train y_train];
+scatter(x_train,y_train);
+
+x_test = sort(2*pi*rand([1000 1]));
+
+TRNOPT(1) = 100;  % numero de epocas
+TRNOPT(2) = 0.05; % error goal
+TRNOPT(3) = 0.01; % initial step size
+TRNOPT(4) = 0.9;  % step size decrease rate
+TRNOPT(5) = 1.1;  % step size increase rate
+
+DISPOPT = zeros(1,4);
+
+Sugeno_unt = readfis('sugeno_inicial');
+sin_fis = anfis(train_data,Sugeno_unt,TRNOPT,DISPOPT,[]);
+plot(x_test,sin(x_test),x_test,evalfis(x_test,sin_fis));
+legend('Funcao seno','ANFIS');
