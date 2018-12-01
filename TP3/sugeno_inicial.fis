@@ -15,17 +15,17 @@ DefuzzMethod='wtaver'
 Name='A1'
 Range=[0 6.28318530717959]
 NumMFs=3
-MF1='A1':'trimf',[-3.14159265358979 0 3.142]
-MF2='A2':'trimf',[0 3.14159265358979 6.28318530717959]
-MF3='A3':'trimf',[3.125 6.266 9.42477796076938]
+MF1='A1':'gaussmf',[1.334 2.037e-05]
+MF2='A2':'gaussmf',[1.334 3.142]
+MF3='A3':'gaussmf',[1.341 6.267]
 
 [Output1]
 Name='output1'
 Range=[0 1]
 NumMFs=3
-MF1='f1':'linear',[0 0]
-MF2='f2':'linear',[0 0]
-MF3='f3':'linear',[0 0]
+MF1='f1':'linear',[0.636619772367581 0]
+MF2='f2':'linear',[-0.636619772367581 2]
+MF3='f3':'linear',[0.636619772367581 -4]
 
 [Rules]
 1, 1 (1) : 1
