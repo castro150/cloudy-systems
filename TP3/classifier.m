@@ -33,6 +33,14 @@ function accuracy = classifier(x, y, K, plotGraphs)
 
     % Agrupando treino e teste.
     training = [training1; training2];
+    
+    % Separando nos folds para validação cruzada.
+    training = training(randperm(size(training, 1)), :);
+%     [training validation] = get_10_fold(training, 1);
+%     [training validation] = get_10_fold(training, 3);
+%     [training validation] = get_10_fold(training, 7);
+%     [training validation] = get_10_fold(training, 10);
+    
     yt = training(:, d + 1);
     xt = training(:, 1:d);
     testing = [testing1; testing2];
