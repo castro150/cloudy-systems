@@ -10,7 +10,8 @@
 % Data: 07/12/2018
 %------------------------------------------------------------------------%
 % Classificador ANFIS.
-function accuracy = classifier(x, y, K, plotGraphs)
+function [accuracy, accTrain, accVal] = classifier(x, y, K, plotGraphs)
+    warning('off','all');
     d = size(x, 2);
 
     % Separando dados em treino e teste, equilibrando as duas classes.
@@ -31,38 +32,57 @@ function accuracy = classifier(x, y, K, plotGraphs)
     training2 = class2(idx(1:round(P*m)), :);
     testing2 = class2(idx(round(P*m)+1:end), :);
 
-    % Agrupando treino e teste.
-    training = [training1; training2];
-    
-    % Separando nos folds para validação cruzada.
-    training = training(randperm(size(training, 1)), :);
-%     [training validation] = get_10_fold(training, 1);
-%     [training validation] = get_10_fold(training, 3);
-%     [training validation] = get_10_fold(training, 7);
-%     [training validation] = get_10_fold(training, 10);
-    
-    yt = training(:, d + 1);
-    xt = training(:, 1:d);
+    % Agrupando treino e teste, embaralhando dados.
     testing = [testing1; testing2];
-    yd = testing(:, d + 1);
-    xv = testing(:, 1:d);
+    training = [training1; training2];
+    training = training(randperm(size(training, 1)), :);
     
-    % Preparando o modelo.
-    fis = genfis3(xt, yt, 'sugeno', K);
-    % Treino, com um máximo de 100 épocas.
-    fis = anfis([xt yt], fis, 100);    
-    ys = evalfis(xt, fis);
+    % Inicialização de variáveis.
+    accTrains = zeros(10, 1);
+    accVals = zeros(10, 1);    
+    
+    % Validação cruzada com 10 folds.
+    for i=1:10,
+        % Separando fold de validação do treino.
+        [train, val] = get_10_fold(training, i);
+    
+        yTrain = train(:, d + 1);
+        xTrain = train(:, 1:d);
+        yVal = val(:, d + 1);
+        xVal = val(:, 1:d);
+        
+        % Preparando o modelo.
+        init_fis = genfis3(xTrain, yTrain, 'sugeno', K, [NaN NaN NaN false]);
+        % Treino, com um máximo de 100 épocas.
+        fis = anfis([xTrain yTrain], init_fis, 100, zeros(4, 1));
+        ysTrain = evalfis(xTrain, fis);
+        % Conversão dos parâmetros para classificação.
+        ysTrain(ysTrain >= 0.5) = 1;
+        ysTrain(ysTrain < 0.5) = 0;
+        
+        % Precisão do treinamento.
+        accTrains(i) = sum(yTrain == ysTrain) / size(ysTrain, 1);
+        
+        % Validação cruzada e precisão.
+        ysVal = evalfis(xVal, fis);
+        ysVal(ysVal >= 0.5) = 1;
+        ysVal(ysVal < 0.5) = 0;
+        accVals(i) = sum(yVal == ysVal) / size(ysVal, 1);
+        
+        if max(accVals) == accVals(i),
+            best_fis = fis;
+        end
+    end
+    
+    % Teste.    
+    yTest = testing(:, d + 1);
+    xTest = testing(:, 1:d);
+    ysTest = evalfis(xTest, best_fis);
     % Conversão dos parâmetros para classificação.
-    ys(ys >= 0.5) = 1;
-    ys(ys < 0.5) = 0;
-    % Precisão do treinamento.
-    accTrain = sum(yt == ys) / size(ys, 1);
+    ysTest(ysTest >= 0.5) = 1;
+    ysTest(ysTest < 0.5) = 0;
     
-    % Validação.
-    yv = evalfis(xv, fis);
-    % Conversão dos parâmetros para classificação.
-    yv(yv >= 0.5) = 1;
-    yv(yv < 0.5) = 0;
-    
-    accuracy = sum(yv == yd) / size(yv, 1);
+    accuracy = sum(ysTest == yTest) / size(ysTest, 1);
+    accTrain = mean(accTrains);
+    accVal = mean(accVals);
 end
