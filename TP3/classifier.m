@@ -54,7 +54,7 @@ function [accuracy, accTrain, accVal] = classifier(x, y, K, plotGraphs)
         % Preparando o modelo.
         init_fis = genfis3(xTrain, yTrain, 'sugeno', K, [NaN NaN NaN false]);
         % Treino, com um máximo de 100 épocas.
-        fis = anfis([xTrain yTrain], init_fis, 100, zeros(4, 1));
+        fis = anfis([xTrain yTrain], init_fis, 20, zeros(4, 1));
         ysTrain = evalfis(xTrain, fis);
         % Conversão dos parâmetros para classificação.
         ysTrain(ysTrain >= 0.5) = 1;
@@ -72,6 +72,8 @@ function [accuracy, accTrain, accVal] = classifier(x, y, K, plotGraphs)
         if max(accVals) == accVals(i),
             best_fis = fis;
         end
+        
+        fprintf('FOLD %d DONE\n', i);
     end
     
     % Teste.    
@@ -85,4 +87,19 @@ function [accuracy, accTrain, accVal] = classifier(x, y, K, plotGraphs)
     accuracy = sum(ysTest == yTest) / size(ysTest, 1);
     accTrain = mean(accTrains);
     accVal = mean(accVals);
+    
+    if plotGraphs,
+        % Plotando separação final.
+        figure('name', 'Separação Final', 'number', 'off');
+        hold on
+        for v=1:size(xTest, 1),
+            color = 'k';
+            symbol = 'o';
+            if (ysTest(v) == 1); color = 'r'; end;
+            if (ysTest(v) ~= yTest(v)); symbol = 'x'; end;
+            point = xTest(v, :);
+            plot(point(1), point(2), symbol, 'Color', color);
+        end
+        hold off
+    end
 end

@@ -56,5 +56,70 @@ fprintf('EQM: %f\n', EQM);
 %% Classificador ANFIS com dados 2D.
 clear all;
 
+% Testando para diferentes quantidades de regras.
 load('dataset_2d.mat');
-% classifier(x, y, 3, false);
+
+accuracies = zeros(8, 1);
+accVals = zeros(8, 1);
+for K=2:8,
+    % Plota os gráficos para K = 2, K = 3 e K = 8.
+    [accuracy, ~, accVal] = classifier(x, y, K, K == 2 | K == 3 | K == 8);
+    accuracies(K) = accuracy;
+    accVals(K) = accVal;
+    fprintf('K = %d DONE\n', K);
+end
+
+% Plotando precisões de treino e teste.
+figure('name', 'Precisões', 'number', 'off');
+plot(1:8, accuracies, 1:8, accVals);
+title('Precisões de treino e teste.');
+legend('Precisão de teste', 'Precisão de treino');
+
+%% Classificador ANFIS com a base de dados Breast Cancer Wisconsin (Diagnostic).
+clear all;
+
+% Testando para diferentes quantidades de regras.
+data = csvread('breast_cancer.csv');
+y = data(:, 1);
+x = data(:, 2:end);
+
+accuracies = zeros(8, 1);
+accVals = zeros(8, 1);
+for K=2:8,
+    % Plota os gráficos para K = 2, K = 3 e K = 8.
+    [accuracy, ~, accVal] = classifier(x, y, K, false);
+    accuracies(K) = accuracy;
+    accVals(K) = accVal;
+    fprintf('K = %d DONE\n', K);
+end
+
+% Plotando precisões de treino e teste.
+figure('name', 'Precisões', 'number', 'off');
+plot(1:8, accuracies, 1:8, accVals);
+title('Precisões de treino e teste.');
+legend('Precisão de teste', 'Precisão de treino');
+
+%% Classificador ANFIS com a base de dados Iris Species.
+clear all;
+
+% Testando para diferentes quantidades de regras.
+data = csvread('iris.csv');
+y = data(:, 1);
+x = data(:, 2:end);
+
+accuracies = zeros(8, 1);
+accVals = zeros(8, 1);
+for K=2:8,
+    % Plota os gráficos para K = 2, K = 3 e K = 8.
+    [accuracy, ~, accVal] = classifier(x, y, K, false);
+    accuracies(K) = accuracy;
+    accVals(K) = accVal;
+    fprintf('K = %d DONE\n', K);
+end
+
+% Plotando precisões de treino e teste.
+figure('name', 'Precisões', 'number', 'off');
+plot(1:8, accuracies, 1:8, accVals);
+title('Precisões de treino e teste.');
+legend('Precisão de teste', 'Precisão de treino');
+ylim([0 1.05]);
